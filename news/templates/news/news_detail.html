@@ -1,0 +1,17 @@
+<!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+ 
+<!-- Название у нас будет proudcts -->
+{% block title %}
+Статьи и новости
+{% endblock title %}
+ 
+{% block content %}
+<h1>{{ post.title|censor }}</h1>
+<p>{{ post.created_dtm|date:'d-M-Y H:i:s' }}</p>
+<a href="{% url 'edit_news' post.pk %}">Редактировать</a>
+<a href="{% url 'delete_news' post.pk %}">Удалить</a>
+<p>{{ post.content|censor:'-' }}</p>
+{% endblock content %}

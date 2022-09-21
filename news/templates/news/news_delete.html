@@ -1,0 +1,18 @@
+<!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+Удалить новость
+{% endblock title %}
+ 
+{% block content %}
+<h1>{{ post.title|censor }}</h1>
+<p>{{ post.created_dtm|date:'d-M-Y H:i:s' }}</p>
+<p>{{ post.content|censor:'-' }}</p>
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Подтвердить удаление">
+</form>
+{% endblock content %}

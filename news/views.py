@@ -9,14 +9,14 @@ from .forms import NewsForm
 
 # Create your views here.
 
-class NewsList(ListView):
+class NewsList(LoginRequiredMixin, ListView):
     # model = Post
     queryset = Post.objects.order_by('-created_dtm')
     template_name = 'news/news.html'
     context_object_name = 'news'
     paginate_by = 3
 
-class NewsDetail(DetailView):
+class NewsDetail(LoginRequiredMixin, DetailView):
     model = Post
     template_name = 'news/news_detail.html'
     context_object_name = 'post'
@@ -39,7 +39,7 @@ class NewsCreate(CreateView):
     form_class = NewsForm
 
 
-class NewsDelete(DeleteView):
+class NewsDelete(LoginRequiredMixin, DeleteView):
     template_name = 'news/news_delete.html'
     queryset = Post.objects.all()
     success_url = '/news/'
@@ -51,7 +51,7 @@ class ProductDeleteView(DeleteView):
     success_url = '/news/'
 
 
-class NewsF(ListView):
+class NewsF(LoginRequiredMixin, ListView):
     queryset = PostAuthor.objects.order_by('-Дата_создания')
     # model = Post
     # ordering = ['created_dtm']

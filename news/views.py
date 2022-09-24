@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .models import *
 from .filters import NewsFilter
@@ -32,9 +33,10 @@ class NewsDetail(LoginRequiredMixin, DetailView):
     context_object_name = 'post'
 
 
-class NewsUpdate(LoginRequiredMixin, UpdateView):
+class NewsUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'news/news_create.html'
     form_class = NewsForm
+    permission_required = ('news.change_post', )
  
     # метод get_object мы используем вместо queryset, 
     # чтобы получить информацию об объекте который мы собираемся редактировать
@@ -44,9 +46,10 @@ class NewsUpdate(LoginRequiredMixin, UpdateView):
 
 
 
-class NewsCreate(CreateView):
+class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     template_name = 'news/news_create.html'
     form_class = NewsForm
+    permission_required = ('news.add_post', )
 
 
 class NewsDelete(LoginRequiredMixin, DeleteView):

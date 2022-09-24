@@ -28,7 +28,9 @@
                         <li class="nav-item"><a class="nav-link" href="/products/">Товары</a></li>
                         <li class="nav-item"><a class="nav-link" href="/news/">Статьи и новости</a></li>
                         <li class="nav-item"><a class="nav-link" href="/news/search">Статьи и новости: поиск</a></li>
+                        {% if perms.news.add_post %}
                         <li class="nav-item"><a class="nav-link" href="/news/add">Добавить статью или новость</a></li>
+                        {% endif %}
                         <li class="nav-item"><a class="nav-link" href="/accounts/logout">Выйти</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>

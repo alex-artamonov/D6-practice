@@ -15,6 +15,17 @@
     </h3>
 
     <ul>
+        {% if perms.news.add_post %}
+        <li>can add!</li>
+        {% endif %}
+        {% if perms.news.change_post %}
+        <li>can edit!</li>
+        {% endif %}
+
+    </ul>
+
+    <ul>  
+
     {% for nws in page_obj %}
         <li>
             <a href="{% url 'news_detail' nws.pk %}" >

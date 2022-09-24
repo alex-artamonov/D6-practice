@@ -11,7 +11,10 @@
 {% block content %}
 <h1>{{ post.title|censor }}</h1>
 <p>{{ post.created_dtm|date:'d-M-Y H:i:s' }}</p>
+
+{% if perms.news.change_post %}
 <a href="{% url 'edit_news' post.pk %}">Редактировать</a>
+{% endif %}
 <a href="{% url 'delete_news' post.pk %}">Удалить</a>
 <p>{{ post.content|censor:'-' }}</p>
 {% endblock content %}

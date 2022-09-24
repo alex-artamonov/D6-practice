@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
-from .views import NewsList, NewsDetail, NewsF , NewsCreate, NewsDelete, NewsUpdate
+from .views import NewsList, NewsDetail, NewsF , NewsCreate, NewsDelete, NewsUpdate, upgrade_me
+from .views import DefaultView
  
 urlpatterns = [
     # path — означает путь. В данном случае путь ко всем товарам у нас останется пустым, 
@@ -11,4 +12,6 @@ urlpatterns = [
     path('add/', NewsCreate.as_view(), name='add_news'),
     path('<int:pk>/delete/', NewsDelete.as_view(), name='delete_news'),
     path('<int:pk>/edit/', NewsUpdate.as_view(), name='edit_news'),
+    path('upgrade/', upgrade_me, name = 'upgrade'),
+    path('default/', DefaultView.as_view()),
     ]

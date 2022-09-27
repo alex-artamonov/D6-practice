@@ -22,9 +22,14 @@ class Author(m.Model):
     
 class Category(m.Model):
     name = m.CharField(max_length=30, unique=True)
+    user = m.ManyToManyField(User, through='UserCategory')
 
     def __str__(self) -> str:
         return self.name
+
+class UserCategory(m.Model):
+    category = m.ForeignKey(Category, on_delete=m.CASCADE)
+    user = m.ForeignKey(User, on_delete=m.CASCADE)
 
 class Post(m.Model):
     NEWS = 'NWS'

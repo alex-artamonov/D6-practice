@@ -23,41 +23,56 @@
         {% endif %}
 
     </ul>
+    <div class="container mt-10">
+        {% for nws in page_obj %}
+        
+        <div class="row">
+            <div class="card" style="width: 80rem;">
+                <div class=""card header">Категория: 
+                    <p>
+                    {% for cat in nws.categories.all  %}
+                        <a href="#" class="btn btn-secondary">{{ cat.name }}</a>
+                    {% endfor %}
+                </p>
+                </div>
+                <!-- <img src="" class="card-img-top" alt="..."> -->
+                <div class="card-body">
+                    <h5 class="card-title text-center">
+                    {{ nws.title|censor }}
+                    </h5>
+                    <p class="card-text">{{ nws.content|censor|truncatewords:50 }}</p>
+                    <a href="{% url 'news_detail' nws.pk %}" class="btn btn-primary">Подробности...</a>
+                </div>
+                <div class="card-footer text-muted">
+                    {{ nws.created_dtm|date:'d.m.Y' }}
+                </div>
+              </div>
+        </div>  
 
-    <ul>  
+        {% endfor %}  
+    </div>
 
-    {% for nws in page_obj %}
-        <li>
-            <a href="{% url 'news_detail' nws.pk %}" >
-                {{ nws.title|censor }} от {{ nws.created_dtm|date:'d.m.Y' }}
-            </a>            
-            <p>
-            {{ nws.content|censor|truncatewords:50 }}
-            </p>
-        </li>
-    {% endfor %}
-    </ul>
     {% if is_paginated %}
  
     <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
     {% if page_obj.has_previous %}
-        <a href="?page=1">Первая</a>
-        <a href="?page={{ page_obj.previous_page_number }}"> {{ page_obj.previous_page_number }} </a>
+        <a href="?page=1" class="btn btn-secondary">Первая</a>
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-secondary"> {{ page_obj.previous_page_number }} </a>
     {% endif %}
  
     <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
     {% for num in page_obj.paginator.page_range %}
         {% if page_obj.number == num %}
-            <a>{{ num }}</a>
+            <a><strong>{{ num }}</strong></a>
         {% elif num > page_obj.number|add:'-1' and num < page_obj.number|add:'1' %}
-            <a href="?page={{ num }}">{{ num }}</a>
+            <a href="?page={{ num }}" class="btn btn-secondary">{{ num }}</a>
         {% endif %}
     {% endfor %}
  
     <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
     {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}"> {{ page_obj.next_page_number }}</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-secondary"> {{ page_obj.next_page_number }}</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-secondary">Последняя</a>
     {% endif %}
  
 {% endif %}

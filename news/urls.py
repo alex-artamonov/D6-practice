@@ -14,4 +14,5 @@ urlpatterns = [
     path('<int:pk>/edit/', NewsUpdate.as_view(), name='edit_news'),
     path('upgrade/', upgrade_me, name = 'upgrade'),
     path('default/', DefaultView.as_view()),
+    path('cat', NewsList.as_view(), name='news_by_cat'),
     ]

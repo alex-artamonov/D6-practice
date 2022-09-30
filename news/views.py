@@ -7,6 +7,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.mail import send_mail
 
 from .models import *
 from .filters import NewsFilter
@@ -22,9 +23,13 @@ class NewsList(LoginRequiredMixin, ListView):
     paginate_by = 3
 
     def get_context_data(self, **kwargs):
+        news = Post.objects.all()
         context = super().get_context_data(**kwargs)
         context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
         # context['one'] = 'zwei'
+        # context['cats'] = ', '.join([cat for cat in news.categories.all()])
+        # print(context['cats'])
+        context['categories'] = PostCategory.objects.all()
         return context
 
 class NewsDetail(LoginRequiredMixin, DetailView):
@@ -51,6 +56,9 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = NewsForm
     permission_required = ('news.add_post', )
 
+    # def post(self, request, *args, **kwargs):
+    #     add_notice = ''
+
 
 class NewsDelete(LoginRequiredMixin, DeleteView):
     template_name = 'news/news_delete.html'
@@ -65,7 +73,8 @@ class ProductDeleteView(DeleteView):
 
 
 class NewsF(LoginRequiredMixin, ListView):
-    queryset = PostAuthor.objects.order_by('-Дата_создания')
+    # queryset = PostAuthor.objects.order_by('-Дата_создания')
+    queryset = Post.objects.all()
     # model = Post
     # ordering = ['created_dtm']
     template_name = 'news/news_filter.html'
@@ -79,6 +88,8 @@ class NewsF(LoginRequiredMixin, ListView):
         context['authors_list'] = authors_list
         authors = Author.objects.all()
         context['authors'] = authors
+        categories = Category.objects.all()
+        context['categories'] = categories
         return context
 
 

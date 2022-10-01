@@ -162,8 +162,6 @@ def follow_category(request, pk):
     user = request.user
     category = Category.objects.get(id=pk)
     user.category_set.add(category)
-    print(request.GET)
-    print('pk:', pk)
     return redirect('/')
         
 

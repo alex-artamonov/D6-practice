@@ -26,7 +26,7 @@ def news_by_category(request, cat_id):
     return render(request, 'news/news.html', context)
 
 
-class NewsByCategory(ListView):
+class NewsByCategory(LoginRequiredMixin, ListView):
     # queryset = Post.objects.all()
     model = Post
     template_name = 'news/news.html'
@@ -63,6 +63,10 @@ class NewsList(LoginRequiredMixin, ListView):
     context_object_name = 'news'
     paginate_by = 3
 
+    def post(self, request, *args, **kwargs):
+        print(self.request['name'])
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):        
         context = super().get_context_data(**kwargs)
         context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
@@ -91,7 +95,6 @@ class NewsUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         return Post.objects.get(pk=id)
 
 
-
 class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     template_name = 'news/news_create.html'
     form_class = NewsForm
@@ -100,6 +103,8 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     # def post(self, request, *args, **kwargs):
     #     add_notice = ''
 
+class CategorySubscribe():
+    pass
 
 class NewsDelete(LoginRequiredMixin, DeleteView):
     template_name = 'news/news_delete.html'
@@ -121,7 +126,6 @@ class NewsF(LoginRequiredMixin, ListView):
     template_name = 'news/news_filter.html'
     context_object_name = 'news'
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filter'] = NewsFilter(self.request.GET, queryset=self.get_queryset())
@@ -132,7 +136,6 @@ class NewsF(LoginRequiredMixin, ListView):
         categories = Category.objects.all()
         context['categories'] = categories
         return context
-
 
 
 class DefaultView(LoginRequiredMixin, TemplateView):
@@ -151,6 +154,16 @@ def upgrade_me(request):
     authors_group = Group.objects.get(name='authors')
     if not request.user.groups.filter(name='authors').exists():
         authors_group.user_set.add(user)
+    return redirect('/')
+
+
+def follow_category(request, pk):
+    # for it in request:
+    user = request.user
+    category = Category.objects.get(id=pk)
+    user.category_set.add(category)
+    print(request.GET)
+    print('pk:', pk)
     return redirect('/')
         
 

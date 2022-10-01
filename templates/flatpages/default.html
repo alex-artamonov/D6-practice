@@ -30,23 +30,25 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'search_news' %}">Статьи и новости: поиск</a></li>
                         {% if perms.news.add_post %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'add_news' %}">Добавить статью или новость</a></li>
-                        {% endif %}                        
+                        {% endif %}    
+                        <form method="post">
+                            {% csrf_token %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Подписаться на категории новостей</a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 {% for cat in categories %} 
-                                <li><a class="dropdown-item" href="{{ cat.get_absolute_url }}">{{ cat.name  }}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'follow_cat' cat.pk %}">{{ cat.name }}</li>
                                 {% endfor %}
                             </ul>
-                        </li>
+                        </li>    
+                        </form>                    
+                        
                         <li class="nav-item"><a class="nav-link" href="/accounts/logout">Выйти</a></li>
                     </ul>
                 </div>
             </div>
-        </nav>
-        
-        
+        </nav>     
         <!-- Page content-->
         <div class="container">
             <div class="text-center mt-5">

@@ -4,7 +4,6 @@ from django.db.models import Sum
 from django.urls import reverse_lazy
 
 
-
 # Create your models here.
 
 class Author(m.Model):
@@ -34,6 +33,11 @@ class Category(m.Model):
 class UserCategory(m.Model):
     category = m.ForeignKey(Category, on_delete=m.CASCADE)
     user = m.ForeignKey(User, on_delete=m.CASCADE)
+
+    class Meta:
+        constraints = [
+            m.UniqueConstraint('user_id', 'category_id', name='unique_user_category')
+        ]
 
 class Post(m.Model):
     NEWS = 'NWS'
@@ -74,7 +78,6 @@ class PostCategory(m.Model):
         constraints = [
             m.UniqueConstraint('post_id', 'category_id', name='unique_post_category')
         ]
-
 
 
 class Comment(m.Model):

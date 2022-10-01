@@ -45,21 +45,41 @@
                 </div>
             </div>
         </nav>
-        <p>Вы вошли как: <b>{{ request.user.username }}</b></p>
-        {% if is_not_author %}
-            <a href="upgrade/" class="btn btn-primary"> Хочу стать автором!</a> 
-        {% endif %}
+        
         
         <!-- Page content-->
         <div class="container">
             <div class="text-center mt-5">
                 <div class="row">
-                    <div class="col-lg-9 text-start">
+                    <div class="col-lg-2">
+                       <p>Вы вошли как: <b>{{ request.user.username }}</b>
+                            {% if is_not_author %}
+                            <a href="upgrade/" class="btn btn-primary"> Хочу стать автором!</a> 
+                            {% endif %} 
+                        </p>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <h5>Категории:</h5>
+                        <div class="list-group">
+                            {% for cat in categories %}                            
+                            <a href="/category/{{ cat.pk }}" class="list-group-item list-group-item-action" aria-current="true">
+                                {{ cat.name }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                        
+                    </div>
+                
+                    <div class="col-lg-10 text-start">
                      {% block content %}
                      {{ flatpage.content }}
                      {% endblock content %}
                     </div>
-                  </div>
+                  
+                </div>
             </div>
         </div>
         

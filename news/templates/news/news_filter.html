@@ -23,19 +23,7 @@
         </li>
         {% endfor %}
     </ul>
-    <h3>Категории новостей:</h3>
-    <ul>
-        {% for cat in categories %}
-        <li>
-            <button>
-               <a href="{% url 'news_by_cat' %}">
-                {{ cat.name }}
-                </a> 
-            </button>
-            
-        </li>
-        {% endfor %}
-    </ul>
+ 
     <form method="GET">
         {{ filter.form }} <!-- Форму от фильтров за нас сделает Django. А вот кнопку, увы, придётся делать самому -->
         <input type="submit" value="Найти">

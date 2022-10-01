@@ -1,6 +1,7 @@
 # from operator import methodcaller
 # from django.http import HttpResponse
-from django.shortcuts import redirect
+from re import I
+from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
@@ -14,6 +15,45 @@ from .filters import NewsFilter
 from .forms import NewsForm
 
 # Create your views here.
+
+def news_by_category(request, cat_id):
+    news = Post.objects.filter(categories=cat_id)
+    cats = Category.objects.all()
+    context = {
+        'news': news,
+        'categories': cats,
+    }
+    return render(request, 'news/news.html', context)
+
+
+class NewsByCategory(ListView):
+    # queryset = Post.objects.all()
+    model = Post
+    template_name = 'news/news.html'
+    context_object_name = 'news'
+    paginate_by = 3
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+
+        return qs.filter(categories=self.kwargs.get('pk'))
+
+
+    def get_context_data(self, **kwargs):
+        news = Post.objects.filter(categories=self.kwargs.get('pk'))
+        # for item in kwargs:
+        #     print("asdf")
+        #     print( item)
+        self.queryset = news
+
+        context = super().get_context_data(**kwargs)
+        context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
+        # context['one'] = 'zwei'
+        # context['cats'] = ', '.join([cat for cat in news.categories.all()])
+        # print(context['cats'])
+        context['categories'] = Category.objects.all()  
+        return context
+
 
 class NewsList(LoginRequiredMixin, ListView):
     # model = Post
@@ -29,7 +69,7 @@ class NewsList(LoginRequiredMixin, ListView):
         # context['one'] = 'zwei'
         # context['cats'] = ', '.join([cat for cat in news.categories.all()])
         # print(context['cats'])
-        context['categories'] = PostCategory.objects.all()
+        context['categories'] = Category.objects.all()  
         return context
 
 class NewsDetail(LoginRequiredMixin, DetailView):

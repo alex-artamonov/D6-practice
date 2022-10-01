@@ -10,15 +10,15 @@
 <h2>{{ flatpage.title }}</h2>
     <hr>
     <h3>Новости и статьи:</h3>
-    <h3>Количество на странице: {{ news|length }}  
+    <h3>Количество на странице: {{ news|length }} / {{ news_count }} 
     </h3>
 
     <ul>
         {% if perms.news.add_post %}
-        <li>can add!</li>
+        <li>У вас есть права на <a href="{% url 'add_news' %}">добавление новоcти</a></li>
         {% endif %}
         {% if perms.news.change_post %}
-        <li>can edit!</li>
+        <li>У вас есть права на редактирование новости</li>
         {% endif %}
 
     </ul>
@@ -30,7 +30,7 @@
                 <div class=""card header">Категория: 
                     <p>
                     {% for cat in nws.categories.all  %}
-                        <a href="#" class="btn btn-secondary">{{ cat.name }}</a>
+                        <a href="{{ cat.get_absolute_url }}" class="btn btn-secondary">{{ cat.name }}</a>                        
                     {% endfor %}
                 </p>
                 </div>
@@ -40,7 +40,9 @@
                     {{ nws.title|censor }}
                     </h5>
                     <p class="card-text">{{ nws.content|censor|truncatewords:50 }}</p>
-                    <a href="{% url 'news_detail' nws.pk %}" class="btn btn-primary">Подробности...</a>
+                    <a href="{{ nws.get_absolute_url }}" class="btn btn-primary">Подробности...</a> -->
+                    {% empty %}
+                    <p class="card-text">В этой категории новостей на сегодня нет...</p>
                 </div>
                 <div class="card-footer text-muted">
                     {{ nws.created_dtm|date:'d.m.Y' }}
@@ -50,29 +52,35 @@
 
         {% endfor %}  
     </div>
+    <div class="text-center mt-5">
+        <div class="row">
+            <div class="col-lg-6">
 
-    {% if is_paginated %}
- 
-    <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
-    {% if page_obj.has_previous %}
-        <a href="?page=1" class="btn btn-secondary">Первая</a>
-        <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-secondary"> {{ page_obj.previous_page_number }} </a>
-    {% endif %}
- 
-    <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
-    {% for num in page_obj.paginator.page_range %}
-        {% if page_obj.number == num %}
-            <a><strong>{{ num }}</strong></a>
-        {% elif num > page_obj.number|add:'-1' and num < page_obj.number|add:'1' %}
-            <a href="?page={{ num }}" class="btn btn-secondary">{{ num }}</a>
-        {% endif %}
-    {% endfor %}
- 
-    <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
-    {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-secondary"> {{ page_obj.next_page_number }}</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-secondary">Последняя</a>
-    {% endif %}
+            {% if is_paginated %}
+        
+            <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
+            {% if page_obj.has_previous %}
+                <a href="?page=1">Первая</a>
+                <a href="?page={{ page_obj.previous_page_number }}" > {{ page_obj.previous_page_number }} </a>
+            {% endif %}
+        
+            <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <a><strong>{{ num }}</strong></a>
+                {% elif num > page_obj.number|add:'-1' and num < page_obj.number|add:'1' %}
+                    <a href="?page={{ num }}" >{{ num }}</a>
+                {% endif %}
+            {% endfor %} 
+    
+            <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" > {{ page_obj.next_page_number }}</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" >Последняя</a>
+            {% endif %}
+            </div>
+        </div>
+    </div>
  
 {% endif %}
 {% endblock content %}

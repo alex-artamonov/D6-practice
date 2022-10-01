@@ -1,6 +1,7 @@
 from django.db import models as m
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.urls import reverse_lazy
 
 
 
@@ -23,6 +24,9 @@ class Author(m.Model):
 class Category(m.Model):
     name = m.CharField(max_length=30, unique=True)
     user = m.ManyToManyField(User, through='UserCategory')
+
+    def get_absolute_url(self):
+        return reverse_lazy('news_by_cat', kwargs = {'pk':self.id})
 
     def __str__(self) -> str:
         return self.name
@@ -60,11 +64,16 @@ class Post(m.Model):
 
     def get_absolute_url(self): # добавим абсолютный путь, 
         #чтобы после создания нас перебрасывало на страницу с товаром
-        return f'/news/{self.id}' 
+        return reverse_lazy('news_detail', kwargs = {'pk':self.id})
 
 class PostCategory(m.Model):
     post = m.ForeignKey(Post, on_delete=m.CASCADE)
     category = m.ForeignKey(Category, on_delete=m.CASCADE)
+
+    class Meta:
+        constraints = [
+            m.UniqueConstraint('post_id', 'category_id', name='unique_post_category')
+        ]
 
 
 

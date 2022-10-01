@@ -26,21 +26,21 @@
                         <li class="nav-item"><a class="nav-link" href="/pages/about/">О нас</a></li>
                         <li class="nav-item"><a class="nav-link" href="/pages/contact/">Контакты</a></li>
                         <li class="nav-item"><a class="nav-link" href="/products/">Товары</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/news/">Статьи и новости</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/news/search">Статьи и новости: поиск</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'all_news' %}">Статьи и новости</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'search_news' %}">Статьи и новости: поиск</a></li>
                         {% if perms.news.add_post %}
-                        <li class="nav-item"><a class="nav-link" href="/news/add">Добавить статью или новость</a></li>
-                        {% endif %}
-                        <li class="nav-item"><a class="nav-link" href="/accounts/logout">Выйти</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'add_news' %}">Добавить статью или новость</a></li>
+                        {% endif %}                        
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Подписаться на категории новостей</a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                {% for cat in categories %} 
+                                <li><a class="dropdown-item" href="{{ cat.get_absolute_url }}">{{ cat.name  }}</a></li>
+                                {% endfor %}
                             </ul>
                         </li>
+                        <li class="nav-item"><a class="nav-link" href="/accounts/logout">Выйти</a></li>
                     </ul>
                 </div>
             </div>
@@ -50,36 +50,36 @@
         <!-- Page content-->
         <div class="container">
             <div class="text-center mt-5">
-                <div class="row">
+                <div class="row">               
                     <div class="col-lg-2">
                        <p>Вы вошли как: <b>{{ request.user.username }}</b>
                             {% if is_not_author %}
-                            <a href="upgrade/" class="btn btn-primary"> Хочу стать автором!</a> 
+                            <a href="{% url 'upgrade' %}" class="btn btn-primary"> Хочу стать автором!</a> 
                             {% endif %} 
                         </p>
-                    </div>
-                    
-                </div>
-                <div class="row">
-                    <div class="col-lg-2">
                         <h5>Категории:</h5>
-                        <div class="list-group">
-                            {% for cat in categories %}                            
-                            <a href="/category/{{ cat.pk }}" class="list-group-item list-group-item-action" aria-current="true">
-                                {{ cat.name }}
-                            </a>
-                            {% endfor %}
+                        <div class="row">                           
+                            <div class="list-group">
+                                {% for cat in categories %}  
+                                <div class="col-lt-1">
+                                    <a href="{{ cat.get_absolute_url }}" class="list-group-item list-group-item-action" aria-current="true">
+                                    {{ cat.name }}
+                                    </a>
+                                </div>                         
+                                <!-- <a href="#" class="btn btn-secondary">Подписаться</a> -->
+                                {% endfor %}
+                            </div> 
                         </div>
                         
-                    </div>
-                
-                    <div class="col-lg-10 text-start">
-                     {% block content %}
-                     {{ flatpage.content }}
-                     {% endblock content %}
-                    </div>
+                    </div>               
                   
-                </div>
+                    <div class="col-lg-9 text-start">                        
+                        {% block content %}
+                        {{ flatpage.content }}
+                        {% endblock content %}
+                    </div>
+
+                </div>                
             </div>
         </div>
         

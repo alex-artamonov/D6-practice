@@ -51,7 +51,8 @@ class NewsByCategory(ListView):
         # context['one'] = 'zwei'
         # context['cats'] = ', '.join([cat for cat in news.categories.all()])
         # print(context['cats'])
-        context['categories'] = Category.objects.all()  
+        context['categories'] = Category.objects.all() 
+        context['news_count'] = news.count
         return context
 
 
@@ -62,14 +63,14 @@ class NewsList(LoginRequiredMixin, ListView):
     context_object_name = 'news'
     paginate_by = 3
 
-    def get_context_data(self, **kwargs):
-        news = Post.objects.all()
+    def get_context_data(self, **kwargs):        
         context = super().get_context_data(**kwargs)
         context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
-        # context['one'] = 'zwei'
+        context['one'] = 'zwei'
         # context['cats'] = ', '.join([cat for cat in news.categories.all()])
         # print(context['cats'])
-        context['categories'] = Category.objects.all()  
+        context['categories'] = Category.objects.all()
+        context['news_count'] = Post.objects.all().count
         return context
 
 class NewsDetail(LoginRequiredMixin, DetailView):

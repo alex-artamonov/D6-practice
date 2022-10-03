@@ -1,5 +1,6 @@
 {% extends 'flatpages/default.html' %}
 
+
 {% load custom_filters %}
  
 {% block title %}
@@ -23,11 +24,11 @@
 
     </ul>
     <div class="container mt-10">
-        {% for nws in page_obj %}
+        {% for nws in page_obj %} 
         
         <div class="row">
-            <div class="card" style="width: 80rem;">
-                <div class=""card header">Категория: 
+            <div class="card mb-3" style="width: 80rem;">
+                <div class="card header">Категория: 
                     <p>
                     {% for cat in nws.categories.all  %}
                         <a href="{{ cat.get_absolute_url }}" class="btn btn-secondary">{{ cat.name }}</a>                        
@@ -37,19 +38,23 @@
                 <!-- <img src="" class="card-img-top" alt="..."> -->
                 <div class="card-body">
                     <h5 class="card-title text-center">
-                    {{ nws.title|censor }}
+                    {{ nws.title|censor }} 
+                    </h5>
+                    <h5>
+                        Автор: <a href="{{ nws.author.get_absolute_url }}">{{ nws.author }}</a> 
                     </h5>
                     <p class="card-text">{{ nws.content|censor|truncatewords:50 }}</p>
                     <a href="{{ nws.get_absolute_url }}" class="btn btn-primary">Подробности...</a> -->
-                    {% empty %}
-                    <p class="card-text">В этой категории новостей на сегодня нет...</p>
+
+                    
                 </div>
-                <div class="card-footer text-muted">
-                    {{ nws.created_dtm|date:'d.m.Y' }}
+                <div class="card-footer">
+                    {{ nws.created_dtm|date:'d.m.Y' }}: С момента опубликования прошло {{ nws.created_dtm|timesince }}
                 </div>
               </div>
         </div>  
-
+        {% empty %}
+                    <p class="card-text">В этой категории новостей на сегодня нет...</p>
         {% endfor %}  
     </div>
     <div class="text-center mt-5">

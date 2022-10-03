@@ -32,7 +32,7 @@
     {% for nws in filter.qs %}
         <li>
             <a href="{% url 'news_detail' nws.pk %}" >
-                {{ nws.Название_статьи|censor }} от {{ nws.Дата_создания|date:'d.m.Y' }}
+                {{ nws.title|censor }} от {{ nws.created_dtm|date:'d.m.Y' }}
             </a>            
             <br>
             {{ nws.content|censor|truncatewords:50 }}

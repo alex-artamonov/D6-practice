@@ -2,6 +2,10 @@ from atexit import register
 from django import template
 import re
 import os
+from django.db.models import Count
+
+
+from news.models import Author
 
 register = template.Library()
 
@@ -31,3 +35,10 @@ def replace_badwords(input_text, replacement_char = '*'):
         # res = regex.sub('*' * (len(word) - 4), res)
         res = regex.sub(replacement_char * len(word), res)
     return res
+
+
+# @register.simple_tag
+# def count_categories():
+#     authors = Author.objects.annotate(cnt=Count('post'))
+#     return {'authors': authors}
+

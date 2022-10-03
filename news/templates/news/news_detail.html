@@ -10,7 +10,8 @@
  
 {% block content %}
 <h1>{{ post.title|censor }}</h1>
-<p>{{ post.created_dtm|date:'d-M-Y H:i:s' }}
+<b>Автор</b> <a href="{{ post.author.get_absolute_url }}">{{ post.author }}
+<p class="mt-5">{{ post.created_dtm|date:'d-M-Y H:i:s' }}
     {% for cat in post.categories.all  %}
         <a href="#" class="btn btn-secondary">{{ cat.name }}</a>
     {% endfor %}

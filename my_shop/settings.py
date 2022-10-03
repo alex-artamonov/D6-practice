@@ -158,3 +158,11 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_HOST = 'smtp.yandex.ru' 
+EMAIL_PORT = 465 # порт smtp сервера тоже одинаковый
+EMAIL_HOST_USER = 'sat.arepo' 
+EMAIL_HOST_PASSWORD = 'bywtxyagkfghspfh' # пароль от почты
+EMAIL_USE_SSL = True # Яндекс использует ssl, подробнее о том, 
+#что это, почитайте на Википедии, но включать его здесь обязательно
+# 

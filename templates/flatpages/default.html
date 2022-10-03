@@ -56,15 +56,34 @@
             </div>
         </nav>     
         <!-- Page content-->
+
         <div class="container">
+            <div class="row mt-2">
+                <div class="col-lg-2">
+                    <p>Вы вошли как: <b>{{ request.user.username }}</b>
+                        <p>{{ cats_by_user|join:', '}}</p><span class="comment">using |join:', '</span>
+                    {% if is_not_author %}
+                    <a href="{% url 'upgrade' %}" class="btn btn-primary"> Хочу стать автором!</a>
+                    {% endif %}
+                    </p>
+                </div>
+                <div class="col-lg-10">
+                    <p>Вы подписаны на категории:
+                     <b>{% for cat in cats_by_user %}
+                            &ensp;<a href="{{ cat.get_absolute_url }}" class="link-dark">{{ cat }}</a>&ensp;
+                         {% endfor %}</b>
+                    </p>
+                    
+
+                </div>
+
+            </div>
+
+
             <div class="text-center mt-5">
                 <div class="row">               
                     <div class="col-lg-2">
-                       <p>Вы вошли как: <b>{{ request.user.username }}</b>
-                            {% if is_not_author %}
-                            <a href="{% url 'upgrade' %}" class="btn btn-primary"> Хочу стать автором!</a> 
-                            {% endif %} 
-                        </p>
+
                         <h5>Категории:</h5>
                         <div class="row">                           
                             <div class="list-group">

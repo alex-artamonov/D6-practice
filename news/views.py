@@ -1,6 +1,6 @@
 # from operator import methodcaller
 # from django.http import HttpResponse
-from re import I
+#from re import I
 import re
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
@@ -11,6 +11,8 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.db.models import Count
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 from .models import *
 from .filters import NewsFilter
@@ -21,8 +23,9 @@ from .forms import NewsForm
 class CustomContextMixin():
     def get_context_data(self, **kwargs):
         news = Post.objects.filter(categories=self.kwargs.get('pk'))
+        # user_category = UserCategory.objects.filter()
         # news = Post.objects.all()
-        self.queryset = news
+        # self.queryset = news
 
         context = super().get_context_data(**kwargs)
         context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
@@ -33,6 +36,8 @@ class CustomContextMixin():
         context['filter'] = NewsFilter(self.request.GET, queryset=self.get_queryset())
         authors_list = [a.user.last_name + ', ' + a.user.first_name for a in Author.objects.all()]
         context['authors_list'] = authors_list
+        current_user = User.objects.get(pk=self.request.user.id)
+        context['cats_by_user'] = current_user.category_set.all()
         return context
 
 def news_by_category(request, cat_id):
@@ -95,7 +100,7 @@ class NewsList(LoginRequiredMixin, CustomContextMixin, ListView):
 
 
     def post(self, request, *args, **kwargs):
-        print(self.request['name'])
+        # print(self.request['name'])
         return super().get(request, *args, **kwargs)
 
 
@@ -147,20 +152,40 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         context['authors'] = Author.objects.all()
         return context
 
-    def post(self, request, *args, **kwargs):
-        send_mail( 
-            subject=f'{request.POST["title"]}',  # имя клиента и дата записи будут в теме для удобства
-            message=request.POST["content"], # сообщение с кратким описанием проблемы
-            from_email='sat.arepo@yandex.ru', # здесь указываете почту, с которой будете отправлять (об этом попозже)
-            recipient_list=[request.user.email] # здесь список получателей. Например, секретарь, сам врач и так далее
+    # def get(self, request, *args, **kwargs):
+    #     file_to_render = 'news/email_news.html'
+    #     return render(request, file_to_render, {})
+
+    def post(self, request, *args, **kwargs):        
+
+        user = self.request.user.username
+        title = self.request.POST['title']
+        content = self.request.POST['content']
+
+        # получем наш html
+        html_content = render_to_string(
+            'news/email_news.html',
+            {'user': user,
+            'title': title,
+            'content': content,}
         )
-        # for it in request.POST:
-        #     print(it)
-        # # print(request.POST.get(""))
-        # its = request.POST.get("title")
-        # # for it in its:
-        # print(its.__dir__())
-        # print(request.body)
+
+        # send_mail( 
+        #     subject=f'{request.POST["title"]}',  
+        #     message=request.POST["content"], 
+        #     from_email='sat.arepo@yandex.ru',
+        #     recipient_list=[request.user.email]
+        # )
+
+        msg = EmailMultiAlternatives(
+            subject=f'новая статья по подписке',
+            body=content, #  это то же, что и message
+            from_email='sat.arepo@yandex.ru',
+            to=[request.user.email],
+        )
+        msg.attach_alternative(html_content, "text/html") # добавляем html
+        msg.send()
+
         return super().post(request, *args, **kwargs)
         # pass
 
@@ -183,7 +208,7 @@ class ProductDeleteView(DeleteView):
     success_url = '/news/'
 
 
-class NewsF(LoginRequiredMixin, ListView):
+class NewsF(LoginRequiredMixin, CustomContextMixin, ListView):
     # queryset = PostAuthor.objects.order_by('-Дата_создания')
     queryset = Post.objects.order_by('-created_dtm')
     # queryset = Post.objects.all()
@@ -192,16 +217,16 @@ class NewsF(LoginRequiredMixin, ListView):
     template_name = 'news/news_filter.html'
     context_object_name = 'news'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['filter'] = NewsFilter(self.request.GET, queryset=self.get_queryset())
-        authors_list = [a.user.last_name + ', ' + a.user.first_name for a in Author.objects.all()]
-        context['authors_list'] = authors_list
-        authors = Author.objects.all()
-        context['authors'] = authors
-        categories = Category.objects.all()
-        context['categories'] = categories
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['filter'] = NewsFilter(self.request.GET, queryset=self.get_queryset())
+    #     authors_list = [a.user.last_name + ', ' + a.user.first_name for a in Author.objects.all()]
+    #     context['authors_list'] = authors_list
+    #     authors = Author.objects.all()
+    #     context['authors'] = authors
+    #     categories = Category.objects.all()
+    #     context['categories'] = categories
+    #     return context
 
 
 class DefaultView(LoginRequiredMixin, TemplateView):

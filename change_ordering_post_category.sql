@@ -1,0 +1,42 @@
+BEGIN;
+--
+-- Change Meta options on category
+--
+-- (no-op)
+--
+-- Change Meta options on post
+--
+-- (no-op)
+--
+-- Alter field rating on author
+--
+-- (no-op)
+--
+-- Alter field name on category
+--
+-- (no-op)
+--
+-- Alter field author on post
+--
+-- (no-op)
+--
+-- Alter field content on post
+--
+-- (no-op)
+--
+-- Alter field created_dtm on post
+--
+-- (no-op)
+--
+-- Alter field rating on post
+--
+-- (no-op)
+--
+-- Alter field title on post
+--
+-- (no-op)
+--
+-- Alter field type on post
+--
+-- (no-op)
+COMMIT;

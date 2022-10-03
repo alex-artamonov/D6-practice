@@ -12,7 +12,7 @@ class NewsForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control',}),
             'author': forms.Select(attrs={'class': 'form-control'}),
-            'content': forms.Textarea(attrs={'class': 'form-control', 'rows':10, 'placeholder': '{скопируй текст ниже, если нечего сказать}' }),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows':10, 'placeholder': '{% lorem  3 p random %}' }),
             'type': forms.Select(attrs={'class': 'form-control'}),
             'categories': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }

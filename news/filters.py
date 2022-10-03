@@ -9,7 +9,8 @@ class NewsFilter(FilterSet):
 
     # Дата_создания = django_filters.DateRangeFilter()
     created_dtm = django_filters.DateFromToRangeFilter(widget=RangeWidget(attrs={'type': 'date'}))
-    
+    title = django_filters.CharFilter(lookup_expr='icontains')
+
     class Meta:
         # model = PostAuthor
         model = Post

@@ -34,6 +34,11 @@ class Category(m.Model):
     def __str__(self) -> str:
         return self.name
 
+    class Meta:
+        ordering = ['-name']
+        verbose_name = "Категория"
+        verbose_name_plural = 'Категории'
+
 class UserCategory(m.Model):
     category = m.ForeignKey(Category, on_delete=m.CASCADE)
     user = m.ForeignKey(User, on_delete=m.CASCADE)
@@ -73,6 +78,9 @@ class Post(m.Model):
     def get_absolute_url(self): # добавим абсолютный путь, 
         #чтобы после создания нас перебрасывало на страницу с товаром
         return reverse_lazy('news_detail', kwargs = {'pk':self.id})
+
+    class Meta:
+        ordering = ['-created_dtm']
 
 class PostCategory(m.Model):
     post = m.ForeignKey(Post, on_delete=m.CASCADE)

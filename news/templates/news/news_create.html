@@ -11,7 +11,7 @@
 <form method="POST">
     {% csrf_token %} 
     {{ form }}
-    {% lorem  3 p random %}
+    {% lorem 3 p random %}
     <button type="submit" class="btn btn-primary">Добавить новость</button>
 </form>
 {% endblock content %}

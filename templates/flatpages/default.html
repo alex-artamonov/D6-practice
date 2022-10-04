@@ -23,7 +23,7 @@
     </head>
     <body>
         <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-lg-top">
             <div class="container">
                 <a class="navbar-brand" href="#">Django rules!</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -66,46 +66,25 @@
                     <a href="{% url 'upgrade' %}" class="btn btn-primary"> Хочу стать автором!</a>
                     {% endif %}
                     </p>
-                </div>
-                <div class="col-lg-10">
-                    <p>Вы подписаны на категории:
-                     <b>{% for cat in cats_by_user %}
-                            &ensp;<a href="{{ cat.get_absolute_url }}" class="link-dark">{{ cat }}</a>&ensp;
-                         {% endfor %}</b>
-                    </p>
-                    
-
-                </div>
-
-            </div>
-
-
-            <div class="text-center mt-5">
-                <div class="row">               
-                    <div class="col-lg-2">
-
-                        <h5>Категории:</h5>
-                        <div class="row">                           
-                            <div class="list-group">
-                                 
-                                <div class="col-lt-1">
-                                    {% for cat in categories %} 
-                                    <a href="{{ cat.get_absolute_url }}" class="list-group-item list-group-item-action" aria-current="true">
-                                    {{ cat.name }} <span class="'badge rounded-pill text-bg-primary">{{ cat.cnt }}</span>
-                                    </a>
-                                    {% endfor %}
-                                    <hr>
-                                    <a href="{% url 'all_news' %}" class="list-group-item list-group-item-action" aria-current="true">
-                                        <Все категории>
-                                    </a>
-                                </div>                         
-                                <!-- <a href="#" class="btn btn-secondary">Подписаться</a> -->
-                                
-                            </div> 
-                        </div>
-                        <hr>
+                    <div class="list-group">
+                        <h5>Категории:</h5>         
+                        <div class="col-lt-1">
+                            {% for cat in categories %} 
+                            <a href="{{ cat.get_absolute_url }}" class="list-group-item list-group-item-action" aria-current="true">
+                            {{ cat.name }} <span class="'badge rounded-pill text-bg-primary">{{ cat.cnt }}</span>
+                            </a>
+                            {% endfor %}
+                            <hr>
+                            <a href="{% url 'all_news' %}" class="list-group-item list-group-item-action" aria-current="true">
+                                <Все категории>
+                            </a>
+                        </div>                         
+                        <!-- <a href="#" class="btn btn-secondary">Подписаться</a> -->
+                        
+                    </div> 
+                    <hr>
                         <h5>Авторы:</h5>
-                        <div class="row">                           
+                        <!-- <div class="row">                            -->
                             <div class="list-group">
                                  
                                 <div class="col-lt-1">
@@ -122,17 +101,47 @@
                                 <!-- <a href="#" class="btn btn-secondary">Подписаться</a> -->
                                 
                             </div> 
-                        </div>
-                        
-                    </div>               
-                  
-                    <div class="col-lg-9 text-start">                        
+                        <!-- </div> -->
+
+                </div>
+                
+                <div class="col-lg-10">
+                    <p>Вы подписаны на категории:
+                     <b>{% for cat in cats_by_user %}
+                            &ensp;<a href="{{ cat.get_absolute_url }}" class="link-dark">{{ cat }}</a>&ensp;
+                         {% endfor %}</b>
+                    </p>
+                    <div class="col-lg-10 text-start">
                         {% block content %}
                         {{ flatpage.content }}
                         {% endblock content %}
                     </div>
+                    <div class="col-lg-2">
 
-                </div>                
+                        
+                        <!-- <div class="row">                            -->
+                            
+                        <!-- </div> -->
+                        
+                        
+                    </div>  
+
+                </div>
+                
+
+            
+            </div>
+
+
+            <div class="text-center mt-5">
+                <!-- <div class="row">                -->
+                                 
+                  
+                    <!-- <div class="col-lg-10 text-start">                        
+                        <!-- here was content block -->
+                    <!-- </div> --> -->
+
+                <!-- </div>                 -->
             </div>
         </div>
         

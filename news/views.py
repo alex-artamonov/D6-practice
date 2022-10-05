@@ -122,6 +122,7 @@ class NewsUpdate(LoginRequiredMixin, PermissionRequiredMixin, CustomContextMixin
     template_name = 'news/news_create.html'
     form_class = NewsForm
     permission_required = ('news.change_post', )
+    queryset = Post.objects.order_by('-created_dtm')
  
     # метод get_object мы используем вместо queryset, 
     # чтобы получить информацию об объекте который мы собираемся редактировать

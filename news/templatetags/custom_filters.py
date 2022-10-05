@@ -37,6 +37,17 @@ def replace_badwords(input_text, replacement_char = '*'):
     return res
 
 
+
+@register.filter
+def verbose_name(obj):
+    return obj._meta.verbose_name
+
+
+@register.filter
+def verbose_name_plural(obj):
+    return obj._meta.verbose_name_plural
+
+
 # @register.simple_tag
 # def count_categories():
 #     authors = Author.objects.annotate(cnt=Count('post'))

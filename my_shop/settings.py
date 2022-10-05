@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     'news'
 ]
 
+DEFAULT_FROM_EMAIL = 'sat.arepo@yandex.ru'
+
 SITE_ID = 1
 
 MIDDLEWARE = [
@@ -126,12 +128,12 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_FORMS = {'signup': 'news.forms.BasicSignupForm'}
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_UNIQUE_EMAIL = True
+# ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_EMAIL_VERIFICATION = 'none'
+# ACCOUNT_FORMS = {'signup': 'news.forms.BasicSignupForm'}
 
 
 # Internationalization
@@ -166,3 +168,4 @@ EMAIL_HOST_PASSWORD = 'bywtxyagkfghspfh' # пароль от почты
 EMAIL_USE_SSL = True # Яндекс использует ssl, подробнее о том, 
 #что это, почитайте на Википедии, но включать его здесь обязательно
 # 
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'

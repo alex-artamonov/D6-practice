@@ -1,0 +1,27 @@
+>>> pc
+<QuerySet [<PostCategory: PostCategory object (9)>, <PostCategory: PostCategory object (35)>]>
+>>> for p in pc:
+...     p.user.all()
+... 
+Traceback (most recent call last):
+  File "<console>", line 2, in <module>
+AttributeError: 'PostCategory' object has no attribute 'user'
+>>> for p in pc:
+...     p.category.user.all()
+... 
+<QuerySet [<User: alex>, <User: alex6>, <User: different>]>
+<QuerySet [<User: viktor>, <User: different>, <User: some_guy>]>
+>>> for p in pc:
+...     [u.email for u in p.category.user.all()]
+... 
+['', 'alex.artamonov2010@gmail.com', 'different@user.com']
+['viktor.bolshev@gmail.com', 'different@user.com', 'martin.kovshov@gmail.com']
+>>> p1
+<Post: self.title='How to Display Random Posts in WordPress', self.type='ACL'>
+>>> p1.category_set.all()
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'Post' object has no attribute 'category_set'
+>>> p1.postcategory_set.all()
+<QuerySet [<PostCategory: PostCategory object (9)>, <PostCategory: PostCategory object (35)>]>
+>>> 

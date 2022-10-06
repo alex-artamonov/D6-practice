@@ -6,8 +6,9 @@
     <title>Новая статья</title>
 </head>
 <body>
-    <h2> Здравствуй, {{ user }}! Новая статья в твоем любимом разделе:</h2>
+    <h2> Здравствуй, {{ user }}! Новая статья в твоем любимом разделе 
+        <em><{{ catogory_name }}/em>:</h2>
     <h1>{{ title }}</h1>
-    <p> {{ content|truncatechars:50 }} </p>
+    <p>{{ content|truncatechars:50 }}</p>
 </body>
 </html>

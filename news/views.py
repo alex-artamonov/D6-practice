@@ -157,41 +157,43 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     #     file_to_render = 'news/email_news.html'
     #     return render(request, file_to_render, {})
 
-    def post(self, request, *args, **kwargs):        
-
+    def post(self, request, *args, **kwargs):
         user = self.request.user.username
         title = self.request.POST['title']
         content = self.request.POST['content']
         # print(self.request.POST)
+        recipients_list = []
         categories = self.request.POST.getlist('categories')
-        for cat in categories:
-            print(cat)
+        for cat in categories:            
             category = Category.objects.get(pk=cat)
-            print(get_emails_list(category))
+            # print(f'{category.name = }')
+            recipients_list = get_emails_list(category)
+            send_email(user, category.name, title, content, recipients_list)
+         
 
         # получем наш html
-        html_content = render_to_string(
-            'news/email_news.html',
-            {'user': user,
-            'title': title,
-            'content': content,}
-        )
-
-        # send_mail( 
-        #     subject=f'{request.POST["title"]}',  
-        #     message=request.POST["content"], 
-        #     from_email='sat.arepo@yandex.ru',
-        #     recipient_list=[request.user.email]
+        # html_content = render_to_string(
+        #     'news/email_news.html',
+        #     {'user': user,
+        #     'title': title,
+        #     'content': content,}
         # )
 
-        msg = EmailMultiAlternatives(
-            subject=f'новая статья по подписке',
-            body=content, #  это то же, что и message
-            from_email='sat.arepo@yandex.ru',
-            to=[request.user.email],
-        )
-        msg.attach_alternative(html_content, "text/html") # добавляем html
-        msg.send()
+        # # send_mail( 
+        # #     subject=f'{request.POST["title"]}',  
+        # #     message=request.POST["content"], 
+        # #     from_email='sat.arepo@yandex.ru',
+        # #     recipient_list=[request.user.email]
+        # # )
+
+        # msg = EmailMultiAlternatives(
+        #     subject=f'новая статья по подписке',
+        #     body=content, #  это то же, что и message
+        #     from_email='sat.arepo@yandex.ru',
+        #     to=[request.user.email],
+        # )
+        # msg.attach_alternative(html_content, "text/html") # добавляем html
+        # msg.send()
 
         return super().post(request, *args, **kwargs)
         # pass
@@ -280,7 +282,25 @@ def search(request):
 
 
 
-def get_emails_list(category=Category.objects.get(name='спорт')):
+def get_emails_list(category):
     cat = category
     email_list = [user.email for user in cat.user.all()]
     return email_list
+
+
+def send_email(user, category_name, title, content, recipients_list):
+    html_content = render_to_string(
+        'news/email_news.html',
+        {'user': user,
+        'title': title,
+        'catogory_name': category_name,
+        'content': content,}
+    )
+    msg = EmailMultiAlternatives(
+        subject=f'новая статья по подписке {category_name}',
+        body=content, #  это то же, что и message
+        from_email='sat.arepo@yandex.ru',
+        to=recipients_list,
+    )
+    msg.attach_alternative(html_content, "text/html") # добавляем html
+    msg.send()

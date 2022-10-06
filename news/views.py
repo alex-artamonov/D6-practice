@@ -163,7 +163,7 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         title = self.request.POST['title']
         content = self.request.POST['content']
         # print(self.request.POST)
-        categories = self.request.POST['categories']
+        categories = self.request.POST.getlist('categories')
         for cat in categories:
             print(cat)
             category = Category.objects.get(pk=cat)

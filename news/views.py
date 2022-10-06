@@ -162,6 +162,12 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         user = self.request.user.username
         title = self.request.POST['title']
         content = self.request.POST['content']
+        # print(self.request.POST)
+        categories = self.request.POST['categories']
+        for cat in categories:
+            print(cat)
+            category = Category.objects.get(pk=cat)
+            print(get_emails_list(category))
 
         # получем наш html
         html_content = render_to_string(
@@ -272,3 +278,9 @@ def search(request):
     output = '===='.join([str(p) for p in news_list])
     return HttpResponse(output)
 
+
+
+def get_emails_list(category=Category.objects.get(name='спорт')):
+    cat = category
+    email_list = [user.email for user in cat.user.all()]
+    return email_list

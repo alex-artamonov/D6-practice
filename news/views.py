@@ -168,6 +168,7 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
             category = Category.objects.get(pk=cat)
             # print(f'{category.name = }')
             recipients_list = get_emails_list(category)
+            print(recipients_list)
             send_email(user, category.name, title, content, recipients_list)
          
 
@@ -293,9 +294,12 @@ def send_email(user, category_name, title, content, recipients_list):
         'news/email_news.html',
         {'user': user,
         'title': title,
-        'catogory_name': category_name,
+        'category_name': category_name,
         'content': content,}
     )
+
+    # print(html_content)
+
     msg = EmailMultiAlternatives(
         subject=f'новая статья по подписке {category_name}',
         body=content, #  это то же, что и message

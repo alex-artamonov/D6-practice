@@ -7,7 +7,7 @@
 </head>
 <body>
     <h2> Здравствуй, {{ user }}! Новая статья в твоем любимом разделе 
-        <em><{{ catogory_name }}/em>:</h2>
+        <em>{{ category_name }}</em>:</h2>
     <h1>{{ title }}</h1>
     <p>{{ content|truncatechars:50 }}</p>
 </body>

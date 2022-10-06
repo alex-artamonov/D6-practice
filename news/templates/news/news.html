@@ -1,4 +1,9 @@
-{% extends 'flatpages/default.html' %}
+{% extends 'base.html' %}
+
+
+{% comment %}
+    {% extends 'flatpages/default.html' %}
+{% endcomment %}
 
 
 {% load custom_filters %}
@@ -57,35 +62,53 @@
                     <p class="card-text">В этой категории новостей на сегодня нет...</p>
         {% endfor %}  
     </div>
-    <div class="text-center mt-5 sticky-lg-bottom">
-        <div class="row">
-            <div class="col-lg-6">
-
-            {% if is_paginated %}
-        
-            <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
-            {% if page_obj.has_previous %}
-                <a href="?page=1">Первая</a>
-                <a href="?page={{ page_obj.previous_page_number }}" > {{ page_obj.previous_page_number }} </a>
-            {% endif %}
-        
-            <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
-            {% for num in page_obj.paginator.page_range %}
-                {% if page_obj.number == num %}
-                    <a><strong>{{ num }}</strong></a>
-                {% elif num > page_obj.number|add:'-1' and num < page_obj.number|add:'1' %}
-                    <a href="?page={{ num }}" >{{ num }}</a>
+    <section name="paginator" class="pagination text-center mt-5 sticky-lg-bottom">
+        {% if is_paginated %}
+        <nav aria-label="...">
+            <ul class="pagination justify-content-end">           
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a href="?page=1"  class="page-link">Первая</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ page_obj.previous_page_number }}"  class="page-link">Предыдущая</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ page_obj.previous_page_number }}"  class="page-link">{{ page_obj.previous_page_number }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Предыдущая</a>
+                    </li>
                 {% endif %}
-            {% endfor %} 
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %} 
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Следующая</a>
+                    </li>
+                {% endif %}
+            </ul>
+          </nav>
+    </section>
     
-            <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}" > {{ page_obj.next_page_number }}</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}" >Последняя</a>
-            {% endif %}
-            </div>
-        </div>
-    </div>
  
 {% endif %}
 {% endblock content %}

@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from .views import NewsList, NewsDetail, NewsF , NewsCreate, NewsDelete, NewsUpdate, upgrade_me
-from .views import DefaultView, news_by_category, NewsByCategory, follow_category, NewsByAuthor
+from .views import DefaultView, news_by_category, NewsByCategory, follow_category, NewsByAuthor, unfollow_category
  
 urlpatterns = [
     # path — означает путь. В данном случае путь ко всем товарам у нас останется пустым, 
@@ -15,6 +15,7 @@ urlpatterns = [
     path('upgrade/', upgrade_me, name = 'upgrade'),
     path('default/', DefaultView.as_view()),
     path('category/<int:pk>/', NewsByCategory.as_view(), name='news_by_cat'),
-    path('category/follow/<int:pk>/', follow_category, name='follow_cat'),
+    path('category/<int:pk>/follow/', follow_category, name='follow_cat'),
+    path('category/<int:pk>/unfollow/', unfollow_category, name='unfollow_category'),
     path('author/<int:pk>/', NewsByAuthor.as_view(), name='news_by_author'),
     ]

@@ -38,6 +38,9 @@ class CustomContextMixin():
         context['authors_list'] = authors_list
         current_user = User.objects.get(pk=self.request.user.id)
         context['cats_by_user'] = current_user.category_set.all()
+        # print(Category.objects.exclude(pk__in=list(current_user.category_set.values_list(flat=True))))
+        context['user_has_no_categories'] = Category.objects.exclude(pk__in=list(current_user.category_set.values_list(flat=True)))
+        # context['current_category'] = self.request.GET.get['ca']
         return context
 
 def news_by_category(request, cat_id):
@@ -56,21 +59,25 @@ class NewsByCategory(LoginRequiredMixin, CustomContextMixin, ListView):
     template_name = 'news/news.html'
     context_object_name = 'news'
     paginate_by = 3
+    
 
     def get_queryset(self, **kwargs):
+        # print(self.request.GET)
         qs = super().get_queryset(**kwargs)
         return qs.filter(categories=self.kwargs.get('pk'))
 
-    # def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):
     #     news = Post.objects.filter(categories=self.kwargs.get('pk'))
     #     self.queryset = news
 
-    #     context = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        context['current_category'] = Category.objects.get(pk=self.kwargs.get('pk'))
+        
     #     context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
     #     context['categories'] = Category.objects.all() 
     #     context['news_count'] = news.count
     #     context['authors'] = Author.objects.all()
-    #     return context
+        return context
 
 
 class NewsByAuthor(LoginRequiredMixin, CustomContextMixin, ListView):
@@ -267,6 +274,13 @@ def follow_category(request, pk):
     user.category_set.add(category)
     return redirect(category)
         
+
+def unfollow_category(request, pk):
+    # for it in request:
+    user = request.user
+    category = Category.objects.get(id=pk)
+    user.category_set.remove(category)
+    return redirect('/')       
 
     # def get_context_data(self, **kwargs): # забираем отфильтрованные объекты переопределяя 
     #     # метод get_context_data у наследуемого класса

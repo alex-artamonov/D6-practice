@@ -15,9 +15,13 @@
 {% block content %}
 <h2>{{ flatpage.title }}</h2>
     <hr>
-    <h3>Новости и статьи:</h3>
-    <h3>Количество на странице: {{ news|length }} / {{ news_count }} 
-    </h3>
+    {% if current_category %}
+        <h3>Новости и статьи. Категория <em>{{ current_category }}</em></h3>
+        <a href="{% url 'unfollow_category' current_category.pk %}" class="btn btn-secondary">Отписаться от категории</a>
+    {% else %}
+        <h3>Новости и статьи.</h3>
+    {% endif %}
+    <h3>Количество на странице: {{ news|length }} / {{ news_count }}</h3>
 
     <ul>
         {% if perms.news.add_post %}

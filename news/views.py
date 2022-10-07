@@ -11,8 +11,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.db.models import Count
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
+
 
 from .models import *
 from .filters import NewsFilter
@@ -164,19 +163,19 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     #     file_to_render = 'news/email_news.html'
     #     return render(request, file_to_render, {})
 
-    def post(self, request, *args, **kwargs):
-        user = self.request.user.username
-        title = self.request.POST['title']
-        content = self.request.POST['content']
+    # def post(self, request, *args, **kwargs):
+    #     user = self.request.user.username
+    #     title = self.request.POST['title']
+    #     content = self.request.POST['content']
         # print(self.request.POST)
-        recipients_list = []
-        categories = self.request.POST.getlist('categories')
-        for cat in categories:            
-            category = Category.objects.get(pk=cat)
-            # print(f'{category.name = }')
-            recipients_list = get_emails_list(category)
-            print(recipients_list)
-            send_email(user, category.name, title, content, recipients_list)
+        # recipients_list = []
+        # categories = self.request.POST.getlist('categories')
+        # for cat in categories:            
+        #     category = Category.objects.get(pk=cat)
+        #     # print(f'{category.name = }')
+        #     recipients_list = get_emails_list(category)
+        #     print(recipients_list)
+        #     send_email(user, category.name, title, content, recipients_list)
          
 
         # получем наш html
@@ -203,15 +202,13 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         # msg.attach_alternative(html_content, "text/html") # добавляем html
         # msg.send()
 
-        return super().post(request, *args, **kwargs)
+        # return super().post(request, *args, **kwargs)
         # pass
 
 
     # def post(self, request, *args, **kwargs):
     #     add_notice = ''
 
-class CategorySubscribe():
-    pass
 
 class NewsDelete(LoginRequiredMixin, DeleteView):
     template_name = 'news/news_delete.html'
@@ -297,28 +294,3 @@ def search(request):
 
 
 
-def get_emails_list(category):
-    cat = category
-    email_list = [user.email for user in cat.user.all()]
-    return email_list
-
-
-def send_email(user, category_name, title, content, recipients_list):
-    html_content = render_to_string(
-        'news/email_news.html',
-        {'user': user,
-        'title': title,
-        'category_name': category_name,
-        'content': content,}
-    )
-
-    # print(html_content)
-
-    msg = EmailMultiAlternatives(
-        subject=f'новая статья по подписке {category_name}',
-        body=content, #  это то же, что и message
-        from_email='sat.arepo@yandex.ru',
-        to=recipients_list,
-    )
-    msg.attach_alternative(html_content, "text/html") # добавляем html
-    msg.send()

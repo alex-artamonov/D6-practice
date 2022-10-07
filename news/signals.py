@@ -8,9 +8,12 @@ from django.template.loader import render_to_string
 @receiver(post_save, sender=Post)
 def notify_followers(sender, instance, created, **kwargs):
     # print('hi from notify_followers', sender, instance)
+    # print(f'{instance.get_absolute_url()=}')
+    link = 'http://localhost:8000' + instance.get_absolute_url()
+    # print(link)
     for cat in instance.categories.all():
         # print(get_emails_list(cat))
-        send_email(cat.name, instance.title, instance.content[:51], get_emails_list(cat))
+        send_email(cat.name, instance.title, instance.content[:51], get_emails_list(cat), link)
 
 
 
@@ -20,13 +23,14 @@ def get_emails_list(category):
     return email_list
 
 
-def send_email(category_name, title, content, recipients_list):
+def send_email(category_name, title, content, recipients_list, link):
     html_content = render_to_string(
         'news/email_news.html',
         {'user': 'подписчик',
         'title': title,
         'category_name': category_name,
-        'content': content,}
+        'content': content,
+        'link': link}
     )
 
     # print(html_content)

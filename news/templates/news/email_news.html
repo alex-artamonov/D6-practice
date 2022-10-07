@@ -9,6 +9,6 @@
     <h2> Здравствуй, {{ user }}! Новая статья в твоем любимом разделе 
         <em>{{ category_name }}</em>:</h2>
     <h1>{{ title }}</h1>
-    <p>{{ content|truncatechars:50 }}</p>
+    <a href="{{ link }}">{{ content|truncatechars:50 }}</a>
 </body>
 </html>

@@ -8,7 +8,7 @@ from django import forms
 class NewsForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'author', 'content', 'type', 'categories']
+        fields = ['title', 'content', 'type', 'categories']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control',}),
             'author': forms.Select(attrs={'class': 'form-control'}),

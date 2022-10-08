@@ -157,7 +157,18 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         context['news_count'] = Post.objects.all().count
         # context['authors'] = Group.objects.get(name='authors')
         context['authors'] = Author.objects.all()
+        current_user = User.objects.get(pk=self.request.user.id)
+        author = Author.objects.get(user=current_user)
+        print(author)
+        # viktor.post_set.filter(created_dtm__range=(today - timedelta(days=3), today)).count()
+
         return context
+
+    def form_valid(self, form):
+        author = Author.objects.get(user__id=self.request.user.id)
+        # print(author)
+        form.instance.author = author
+        return super().form_valid(form)
 
     # def get(self, request, *args, **kwargs):
     #     file_to_render = 'news/email_news.html'
@@ -257,9 +268,10 @@ class DefaultView(LoginRequiredMixin, TemplateView):
 def upgrade_me(request):
     user = request.user
     authors_group = Group.objects.get(name='authors')
+    # authors = 
     if not request.user.groups.filter(name='authors').exists():
         authors_group.user_set.add(user)
-        Author(user=user).save()
+        Author.objects.create(user=user).save()
         # print(user)
     return redirect('/')
 

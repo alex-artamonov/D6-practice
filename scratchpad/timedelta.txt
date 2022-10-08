@@ -1,0 +1,28 @@
+>>> viktor.post_set.filter(created_dtm__range=(monthago, today)).count()
+11
+>>> viktor.post_set.filter(created_dtm__range=(today - timedelta(days=7), today)).count()
+/home/alex/Workspace/Projects/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1564: RuntimeWarning: DateTimeField Post.created_dtm received a naive datetime (2022-10-01 16:01:14.673067) while time zone support is active.
+  warnings.warn(
+11
+>>> viktor.post_set.filter(created_dtm__range=(today - timedelta(days=2), today)).count()
+/home/alex/Workspace/Projects/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1564: RuntimeWarning: DateTimeField Post.created_dtm received a naive datetime (2022-10-06 16:01:14.673067) while time zone support is active.
+  warnings.warn(
+0
+>>> viktor.post_set.filter(created_dtm__range=(today - timedelta(days=3), today)).count()
+/home/alex/Workspace/Projects/venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1564: RuntimeWarning: DateTimeField Post.created_dtm received a naive datetime (2022-10-05 16:01:14.673067) while time zone support is active.
+  warnings.warn(
+7
+>>> viktor.post_set.filter(created_dtm__range=(today - timedelta(days=3), today)).exists()
+True
+>>> from django.utils import timezone
+>>> today = timezone.now()
+>>> today
+datetime.datetime(2022, 10, 8, 16, 18, 5, 562541, tzinfo=datetime.timezone.utc)
+>>> yesterday = today - timedalta(days=1)
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+NameError: name 'timedalta' is not defined
+>>> yesterday = today - timedelta(days=1)
+>>> yesterday
+datetime.datetime(2022, 10, 7, 16, 18, 5, 562541, tzinfo=datetime.timezone.utc)
+>>> viktor.post_set.filter(created_dtm__range=(today - timedelta(days=3), today)).count()

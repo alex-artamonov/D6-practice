@@ -1,5 +1,5 @@
 # from operator import methodcaller
-# from django.http import HttpResponse
+from django.http import HttpResponse
 #from re import I
 import re
 from django.shortcuts import redirect, render
@@ -11,6 +11,8 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.db.models import Count
+from django.utils import timezone
+from datetime import timedelta
 
 
 from .models import *
@@ -158,17 +160,29 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         # context['authors'] = Group.objects.get(name='authors')
         context['authors'] = Author.objects.all()
         current_user = User.objects.get(pk=self.request.user.id)
-        author = Author.objects.get(user=current_user)
-        print(author)
+        # author = Author.objects.get(user=current_user)
+        # print(author)
         # viktor.post_set.filter(created_dtm__range=(today - timedelta(days=3), today)).count()
 
         return context
 
     def form_valid(self, form):
+        today = today = timezone.now()
         author = Author.objects.get(user__id=self.request.user.id)
-        # print(author)
-        form.instance.author = author
-        return super().form_valid(form)
+        too_many_posts = author.post_set.filter(
+            created_dtm__range=(today - timedelta(days=3), today)
+            ).count() > 2 # по условию должно быть не более 3 - видимо на том этапе БД не получила запись
+        # print('post_count:', author.post_set.filter(
+        #     created_dtm__range=(today - timedelta(days=3), today)
+        #     ).count())
+        # print(f'{too_many_posts = }')
+        if too_many_posts:
+            # return redirect('/')
+            return HttpResponse("too many posts today")
+        else:            
+            # print(author)
+            form.instance.author = author
+            return super().form_valid(form)
 
     # def get(self, request, *args, **kwargs):
     #     file_to_render = 'news/email_news.html'

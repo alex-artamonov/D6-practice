@@ -21,42 +21,7 @@
     </head>
     <body>
         <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-lg-top">
-            <div class="container">
-                <a class="navbar-brand" href="#">Django rules!</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/pages/about/">О нас</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/pages/contact/">Контакты</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/products/">Товары</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'all_news' %}">Статьи и новости</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'search_news' %}">Статьи и новости: поиск</a></li>
-                        {% if perms.news.add_post %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'add_news' %}">Добавить статью или новость</a></li>
-                        {% endif %}    
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Подписаться на категории новостей</a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    {% for cat in user_has_no_categories %}
-                                    <li><a class="dropdown-item" href="{% url 'follow_cat' cat.pk %}">
-                                        {{ cat.name }}</a>
-                                    </li>
-                                    {% empty %}
-                                    <li class="dropdown-item">Вы подписаны на все категории</li>
-                                    {% endfor %}
-                                </ul>
-                        </li>    
-                  
-                        
-                        <li class="nav-item"><a class="nav-link" href="/accounts/logout">Выйти</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>     
+        {% include 'inc/_navbar.html' %}
         <!-- Page content-->
 
         <div class="container">

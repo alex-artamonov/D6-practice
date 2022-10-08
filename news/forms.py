@@ -12,14 +12,13 @@ class NewsForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control',}),
             'author': forms.Select(attrs={'class': 'form-control'}),
-            'content': forms.Textarea(attrs={'class': 'form-control', 'rows':10, 'placeholder': '{% lorem  3 p random %}' }),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows':10 }),
             'type': forms.Select(attrs={'class': 'form-control'}),
             'categories': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
 
 
-class BasicSignupForm(SignupForm):
-    
+class BasicSignupForm(SignupForm):    
     def save(self, request):
         user = super(BasicSignupForm, self).save(request)
         basic_group = Group.objects.get(name='common')

@@ -155,10 +155,10 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):        
         context = super().get_context_data(**kwargs)
         context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
-        context['categories'] = Category.objects.all()
+        context['categories'] = Category.objects.annotate(cnt=Count('post'))
         context['news_count'] = Post.objects.all().count
         # context['authors'] = Group.objects.get(name='authors')
-        context['authors'] = Author.objects.all()
+        context['authors'] = Author.objects.annotate(cnt=Count('post'))
         current_user = User.objects.get(pk=self.request.user.id)
         # author = Author.objects.get(user=current_user)
         # print(author)
@@ -255,6 +255,7 @@ class NewsF(LoginRequiredMixin, CustomContextMixin, ListView):
     # ordering = ['created_dtm']
     template_name = 'news/news_filter.html'
     context_object_name = 'news'
+    # paginate_by = 4
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)

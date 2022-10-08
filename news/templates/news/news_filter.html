@@ -1,4 +1,4 @@
-{% extends 'flatpages/default.html' %}
+{% extends 'base.html' %}
 
 {% load custom_filters %}
  
@@ -13,32 +13,48 @@
     <h3>Количество на странице: 
         {{ filter.qs|length }}  
     </h3>
-    <h3>Наши авторы:</h3>
-    <ul>
-        {% for author in authors %}
-        <li>
-            <a href="{% url 'search_news' %}?user={{ author.user.username }}">
-                {{ author.user.last_name }}, {{ author.user.first_name }}
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
+    
+  
+    <div class="row mt-2">
+        <div class="col-lg-4">
+            <h3>Наши авторы:</h3>
+            <ul>
+                {% for author in authors %}
+                <li>
+                    <a href="{% url 'search_news' %}?user={{ author.user.username }}">
+                        {{ author.user.last_name }}, {{ author.user.first_name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-lg-8">
+
+            <form method="GET">
+                {{ filter.form }} <!-- Форму от фильтров за нас сделает Django. А вот кнопку, увы, придётся делать самому -->
+                <input type="submit" value="Найти">
+            </form>
+            
+        </div>
+        <div class="col-lg-12">
+            <ul>
+                {% for nws in filter.qs %}
+                    <li>
+                        <a href="{% url 'news_detail' nws.pk %}" >
+                            <strong>{{ nws.title|censor|upper }}</strong> {{ nws.type }} от {{ nws.created_dtm|date:'d.m.Y' }}
+                        </a>            
+                        <br>
+                        {{ nws.content|censor|truncatewords:50 }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+
+    </div>
+    
  
-    <form method="GET">
-        {{ filter.form }} <!-- Форму от фильтров за нас сделает Django. А вот кнопку, увы, придётся делать самому -->
-        <input type="submit" value="Найти">
-    </form>
-    <ul>
-    {% for nws in filter.qs %}
-        <li>
-            <a href="{% url 'news_detail' nws.pk %}" >
-                {{ nws.title|censor }} от {{ nws.created_dtm|date:'d.m.Y' }}
-            </a>            
-            <br>
-            {{ nws.content|censor|truncatewords:50 }}
-        </li>
-    {% endfor %}
-    </ul>
+    
 <!-- {{ news }} -->
 
 {% endblock content %}

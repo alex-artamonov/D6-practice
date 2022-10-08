@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 
-
 {% comment %}
     {% extends 'flatpages/default.html' %}
 {% endcomment %}
@@ -33,8 +32,7 @@
 
     </ul>
     <div class="container mt-10">
-        {% for nws in page_obj %} 
-        
+        {% for nws in page_obj %}         
         <div class="row">
             <div class="card mb-3" style="width: 80rem;">
                 <div class="card header">Категория: 
@@ -54,8 +52,7 @@
                         Автор: <a href="{{ nws.author.get_absolute_url }}">{{ nws.author }}</a> 
                     </h5>
                     <p class="card-text">{{ nws.content|censor|truncatewords:50 }}</p>
-                    <a href="{{ nws.get_absolute_url }}" class="btn btn-primary">Подробности...</a> -->
-
+                    <a href="{{ nws.get_absolute_url }}" class="btn btn-primary">Подробности...</a>
                     
                 </div>
                 <div class="card-footer">
@@ -67,6 +64,7 @@
                     <p class="card-text">В этой категории новостей на сегодня нет...</p>
         {% endfor %}  
     </div>
+    {% comment %}
     <section name="paginator" class="pagination text-center mt-5 sticky-lg-bottom">
         {% if is_paginated %}
         <nav aria-label="...">
@@ -111,9 +109,11 @@
                     </li>
                 {% endif %}
             </ul>
-          </nav>
+        </nav>
+        {% endif %}  
     </section>
+    {% endcomment %}
     
  
-{% endif %}
+<!--  -->
 {% endblock content %}

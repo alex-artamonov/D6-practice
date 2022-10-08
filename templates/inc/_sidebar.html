@@ -1,0 +1,35 @@
+<div class="list-group">
+    <h5>Категории:</h5>         
+    <div class="col-lt-1">
+        {% for cat in categories %} 
+        <a href="{{ cat.get_absolute_url }}" class="list-group-item list-group-item-action" aria-current="true">
+        {{ cat.name }} <span class="'badge rounded-pill text-bg-primary">{{ cat.cnt }}</span>
+        </a>
+        {% endfor %}
+        <hr>
+        <a href="{% url 'all_news' %}" class="list-group-item list-group-item-action" aria-current="true">
+            <Все категории> <span class="'badge rounded-pill text-bg-primary"> {{ news_count }}</span>
+        </a>
+    </div>                         
+    <!-- <a href="#" class="btn btn-secondary">Подписаться</a> -->
+    
+</div> 
+<hr>
+<h5>Авторы:eee</h5>
+<!-- <div class="row">                            -->
+<div class="list-group">
+        
+    <div class="col-lt-1">
+        {% for auth in authors %} 
+        <a href="{{ auth.get_absolute_url }}" class="list-group-item list-group-item-action" aria-current="true">
+        {{ auth }} <span class="'badge rounded-pill text-bg-primary"> {{ auth.cnt }}</span>
+        </a>
+        {% endfor %}
+        <hr>
+        <a href="{% url 'all_news' %}" class="list-group-item list-group-item-action" aria-current="true">
+            <Все авторы> <span class="'badge rounded-pill text-bg-primary"> {{ news_count }}</span>
+        </a>
+    </div>                         
+    <!-- <a href="#" class="btn btn-secondary">Подписаться</a> -->
+    
+</div> 

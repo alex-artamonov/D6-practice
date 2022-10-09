@@ -15,7 +15,7 @@ class NewsFilter(FilterSet):
     class Meta:
         # model = PostAuthor
         model = Post
-        fields = ('created_dtm', 'title', 'author_id', 'content')
+        fields = ('created_dtm', 'title', 'author_id', 'content', 'categories')
         # fields = {
         #     'Дата_создания': ['gt', 'lt'],
         #     'Название_статьи': ['icontains'],

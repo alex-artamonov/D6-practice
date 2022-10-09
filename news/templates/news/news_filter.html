@@ -21,7 +21,7 @@
             <ul>
                 {% for author in authors %}
                 <li>
-                    <a href="{% url 'search_news' %}?user={{ author.user.username }}">
+                    <a href="{% url 'search_news' %}?author_id={{ author.pk }}">
                         {{ author.user.last_name }}, {{ author.user.first_name }}
                     </a>
                 </li>

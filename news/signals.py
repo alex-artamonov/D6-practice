@@ -3,7 +3,9 @@ from django.dispatch import receiver
 from news.models import Post
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from django.shortcuts import redirect
+from allauth.account.signals import user_signed_up
+from django.core.mail import send_mail
+from django.contrib.auth.models import Group
 
 
 # @receiver(pre_init, sender=Post)
@@ -18,6 +20,20 @@ from django.shortcuts import redirect
     
     # raise Exception('OMG')
 
+
+@receiver(user_signed_up)
+def send_welcome(request, user, **kwargs):
+    # print('hi from user_signed_up', user, user.email, kwargs)
+    send_mail(
+        message=f'Уважаемый {user.username}, добро пожаловать на наш сайт.',
+        subject='registration at example.com',
+        from_email='sat.arepo@yandex.ru',
+        recipient_list=[user.email]
+    )
+    common_group = Group.objects.get(name='common')
+    # authors = 
+    if not request.user.groups.filter(name='common').exists():
+        common_group.user_set.add(user)
 
 
 @receiver(post_save, sender=Post)

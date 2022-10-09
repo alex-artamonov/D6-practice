@@ -40,7 +40,7 @@
             <ul>
                 {% for nws in filter.qs %}
                     <li>
-                        <a href="{% url 'news_detail' nws.pk %}" >
+                        <a href="{{ nws.get_absolute_url }}" >
                             <strong>{{ nws.title|censor|upper }}</strong> {{ nws.type }} от {{ nws.created_dtm|date:'d.m.Y' }}
                         </a>            
                         <br>

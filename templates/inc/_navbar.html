@@ -19,7 +19,7 @@
                         Подписаться на категории новостей</a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             {% for cat in user_has_no_categories %}
-                            <li><a class="dropdown-item" href="{% url 'follow_cat' cat.pk %}">
+                            <li><a class="dropdown-item" href="{% url 'follow_category' cat.pk %}">
                                 {{ cat.name }}</a>
                             </li>
                             {% empty %}

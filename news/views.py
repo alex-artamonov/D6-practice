@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.db.models import Count
 from django.utils import timezone
-from datetime import timedelta
+import datetime
 
 
 from .models import *
@@ -319,5 +319,14 @@ def search(request):
     output = '===='.join([str(p) for p in news_list])
     return HttpResponse(output)
 
-
-
+def generate_query_last_week():
+    DT_FORMAT = '%Y-%m-%d'
+    today = datetime.date.today()
+    week_ago = today + datetime.timedelta(-7)
+    url_part = 'http://localhost:8000'
+    url_part += redirect('search_news').url
+    query_part = '?created_dtm_min=' + week_ago.strftime(DT_FORMAT) 
+    + '&created_dtm_max=' + today.strftime(DT_FORMAT)
+    # 'created_dtm_min=2022-10-03&created_dtm_max=2022-10-08'
+    # return url_part + query_part
+    return 'asdf'

@@ -55,8 +55,12 @@ INSTALLED_APPS = [
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.google',
     'simpleapp',
-    'news.apps.NewsConfig'
+    'news.apps.NewsConfig',
+    'django_apscheduler',
 ]
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 
 DEFAULT_FROM_EMAIL = 'sat.arepo@yandex.ru'
 

@@ -4,7 +4,6 @@
     {% extends 'flatpages/default.html' %}
 {% endcomment %}
 
-
 {% load custom_filters %}
  
 {% block title %}
@@ -16,7 +15,8 @@
     <hr>
     {% if current_category %}
         <h3>Новости и статьи. Категория <em>{{ current_category }}</em></h3>
-        <a href="{% url 'unfollow_category' current_category.pk %}" class="btn btn-secondary">Отписаться от категории</a>
+        <a href="{% url 'follow_category' current_category.pk %}" class="btn btn-secondary">Подписаться</a>
+        <a href="{% url 'unfollow_category' current_category.pk %}" class="btn btn-danger">Отписаться</a>
     {% else %}
         <h3>Новости и статьи.</h3>
     {% endif %}
@@ -64,56 +64,4 @@
                     <p class="card-text">В этой категории новостей на сегодня нет...</p>
         {% endfor %}  
     </div>
-    {% comment %}
-    <section name="paginator" class="pagination text-center mt-5 sticky-lg-bottom">
-        {% if is_paginated %}
-        <nav aria-label="...">
-            <ul class="pagination justify-content-end">           
-                {% if page_obj.has_previous %}
-                    <li class="page-item">
-                        <a href="?page=1"  class="page-link">Первая</a>
-                    </li>
-                    <li class="page-item">
-                        <a href="?page={{ page_obj.previous_page_number }}"  class="page-link">Предыдущая</a>
-                    </li>
-                    <li class="page-item">
-                        <a href="?page={{ page_obj.previous_page_number }}"  class="page-link">{{ page_obj.previous_page_number }}</a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link">Предыдущая</a>
-                    </li>
-                {% endif %}
-
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                    <li class="page-item active" aria-current="page">
-                        <a class="page-link">{{ num }}</a>
-                    </li>
-                    {% endif %}
-                {% endfor %}
-
-                {% if page_obj.has_next %} 
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link">Следующая</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-        {% endif %}  
-    </section>
-    {% endcomment %}
-    
- 
-<!--  -->
 {% endblock content %}

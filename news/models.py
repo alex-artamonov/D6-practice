@@ -21,7 +21,9 @@ class Author(m.Model):
         return reverse_lazy('news_by_author', kwargs = {'pk':self.id})
 
     def __str__(self) -> str:
-        return f"{self.user.last_name} {self.user.first_name}"
+        name = f"{self.user.last_name} {self.user.first_name}".strip()
+        name = '<anonymous author>' if not name else name
+        return name
 
     
 class Category(m.Model):

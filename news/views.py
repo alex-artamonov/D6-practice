@@ -167,10 +167,10 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        today = today = timezone.now()
+        today = timezone.now()
         author = Author.objects.get(user__id=self.request.user.id)
         too_many_posts = author.post_set.filter(
-            created_dtm__range=(today - timedelta(days=3), today)
+            created_dtm__range=(today - datetime.timedelta(days=3), today)
             ).count() > 2 # по условию должно быть не более 3 - видимо на том этапе БД не получила запись
         # print('post_count:', author.post_set.filter(
         #     created_dtm__range=(today - timedelta(days=3), today)

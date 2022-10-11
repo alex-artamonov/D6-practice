@@ -117,13 +117,7 @@ class NewsDetail(LoginRequiredMixin, CustomContextMixin, DetailView):
     template_name = 'news/news_detail.html'
     context_object_name = 'post'
 
-    # def get_context_data(self, **kwargs):        
-    #     context = super().get_context_data(**kwargs)
-    #     context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
-    #     context['categories'] = Category.objects.all()
-    #     context['news_count'] = Post.objects.all().count
-    #     context['authors'] = Author.objects.all()
-    #     return context
+
 
 
 class NewsUpdate(LoginRequiredMixin, PermissionRequiredMixin, CustomContextMixin, UpdateView):
@@ -138,13 +132,7 @@ class NewsUpdate(LoginRequiredMixin, PermissionRequiredMixin, CustomContextMixin
         id = self.kwargs.get('pk')
         return Post.objects.get(pk=id)
 
-    # def get_context_data(self, **kwargs):        
-    #     context = super().get_context_data(**kwargs)
-    #     context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
-    #     context['categories'] = Category.objects.all()
-    #     context['news_count'] = Post.objects.all().count
-    #     context['authors'] = Author.objects.all()
-    #     return context
+ 
 
 
 class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -160,9 +148,6 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         # context['authors'] = Group.objects.get(name='authors')
         context['authors'] = Author.objects.annotate(cnt=Count('post'))
         current_user = User.objects.get(pk=self.request.user.id)
-        # author = Author.objects.get(user=current_user)
-        # print(author)
-        # viktor.post_set.filter(created_dtm__range=(today - timedelta(days=3), today)).count()
 
         return context
 
@@ -172,10 +157,7 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         too_many_posts = author.post_set.filter(
             created_dtm__range=(today - datetime.timedelta(days=3), today)
             ).count() > 2 # по условию должно быть не более 3 - видимо на том этапе БД не получила запись
-        # print('post_count:', author.post_set.filter(
-        #     created_dtm__range=(today - timedelta(days=3), today)
-        #     ).count())
-        # print(f'{too_many_posts = }')
+        
         if too_many_posts:
             # return redirect('/')
             return HttpResponse("too many posts today")
@@ -184,55 +166,7 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
             form.instance.author = author
             return super().form_valid(form)
 
-    # def get(self, request, *args, **kwargs):
-    #     file_to_render = 'news/email_news.html'
-    #     return render(request, file_to_render, {})
 
-    # def post(self, request, *args, **kwargs):
-    #     user = self.request.user.username
-    #     title = self.request.POST['title']
-    #     content = self.request.POST['content']
-        # print(self.request.POST)
-        # recipients_list = []
-        # categories = self.request.POST.getlist('categories')
-        # for cat in categories:            
-        #     category = Category.objects.get(pk=cat)
-        #     # print(f'{category.name = }')
-        #     recipients_list = get_emails_list(category)
-        #     print(recipients_list)
-        #     send_email(user, category.name, title, content, recipients_list)
-         
-
-        # получем наш html
-        # html_content = render_to_string(
-        #     'news/email_news.html',
-        #     {'user': user,
-        #     'title': title,
-        #     'content': content,}
-        # )
-
-        # # send_mail( 
-        # #     subject=f'{request.POST["title"]}',  
-        # #     message=request.POST["content"], 
-        # #     from_email='sat.arepo@yandex.ru',
-        # #     recipient_list=[request.user.email]
-        # # )
-
-        # msg = EmailMultiAlternatives(
-        #     subject=f'новая статья по подписке',
-        #     body=content, #  это то же, что и message
-        #     from_email='sat.arepo@yandex.ru',
-        #     to=[request.user.email],
-        # )
-        # msg.attach_alternative(html_content, "text/html") # добавляем html
-        # msg.send()
-
-        # return super().post(request, *args, **kwargs)
-        # pass
-
-
-    # def post(self, request, *args, **kwargs):
-    #     add_notice = ''
 
 
 class NewsDelete(LoginRequiredMixin, DeleteView):
@@ -250,23 +184,10 @@ class ProductDeleteView(DeleteView):
 class NewsF(LoginRequiredMixin, CustomContextMixin, ListView):
     # queryset = PostAuthor.objects.order_by('-Дата_создания')
     queryset = Post.objects.order_by('-created_dtm')
-    # queryset = Post.objects.all()
-    # model = Post
-    # ordering = ['created_dtm']
     template_name = 'news/news_filter.html'
     context_object_name = 'news'
-    # paginate_by = 4
+    
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['filter'] = NewsFilter(self.request.GET, queryset=self.get_queryset())
-    #     authors_list = [a.user.last_name + ', ' + a.user.first_name for a in Author.objects.all()]
-    #     context['authors_list'] = authors_list
-    #     authors = Author.objects.all()
-    #     context['authors'] = authors
-    #     categories = Category.objects.all()
-    #     context['categories'] = categories
-    #     return context
 
 
 class DefaultView(LoginRequiredMixin, TemplateView):

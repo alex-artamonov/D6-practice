@@ -14,10 +14,10 @@ logger = logging.getLogger(__name__)
  
  
 # наша задача по выводу текста на экран
-def my_job():
-    #  Your job processing logic here... 
-    # print('hello from job')
-    tasks.print_hello()
+# def my_job():
+#     #  Your job processing logic here... 
+#     # print('hello from job')
+#     tasks.print_hello()
  
  
 # функция которая будет удалять неактуальные задачи
@@ -35,9 +35,11 @@ class Command(BaseCommand):
         
         # добавляем работу нашему задачнику
         scheduler.add_job(
-            tasks.print_hello,
-            trigger=CronTrigger(second="*/10"),  # Тоже самое что и интервал, но задача тригера таким образом более понятна django
-            id="my_job",  # уникальный айди
+            tasks.send_weekly_digest,
+            trigger=CronTrigger(
+                day_of_week="tue", hour="23", minute="39"
+            ),
+            id="weekly_digest",  # уникальный айди
             max_instances=1,
             replace_existing=True,
         )

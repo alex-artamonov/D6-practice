@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'simpleapp',
     'news.apps.NewsConfig',
     'django_apscheduler',
+    'debug_toolbar'
 ]
 
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
@@ -74,9 +75,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'my_shop.urls'
+INTERNAL_IPS = [
+    '127.0.0.1',
+] 
+
 
 TEMPLATES = [
     {
